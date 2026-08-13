@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-[#08080c] text-slate-200 antialiased selection:bg-cyan-500 selection:text-black">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PORTFOLIO // SYSTEM_GALLERY</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- GSAP Animation Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    body { font-family: 'Space Grotesk', sans-serif; }
+    .mono { font-family: 'Fira Code', monospace; }
+    
+    /* Sci-Fi Grid Overlay Background */
+    .bg-grid {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+
+    /* Subtle Vignette */
+    .vignette {
+      background: radial-gradient(circle, transparent 60%, rgba(8, 8, 12, 0.9) 100%);
+    }
+
+    /* Target Reticle Hover Effect */
+    .card-frame::before, .card-frame::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-color: rgba(6, 182, 212, 0.8);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      z-index: 30;
+    }
+    .card-frame::before { top: -2px; left: -2px; border-top: 2px solid; border-left: 2px solid; }
+    .card-frame::after { bottom: -2px; right: -2px; border-bottom: 2px solid; border-right: 2px solid; }
+    .card-frame:hover::before, .card-frame:hover::after { opacity: 1; transform: scale(1.2); }
+
+    /* Disable Image Dragging & Selection */
+    img {
+      -webkit-user-drag: none;
+      -khtml-user-drag: none;
+      -moz-user-drag: none;
+      -o-user-drag: none;
+      user-drag: none;
+      user-select: none;
+    }
+  </style>
+</head>
+<body class="bg-grid min-h-screen relative overflow-x-hidden" oncontextmenu="return false;">
+
+  <!-- Vignette Layer -->
+  <div class="fixed inset-0 vignette pointer-events-none z-10"></div>
+
+  <!-- Header / HUD Navigation -->
+  <header class="fixed top-0 left-0 w-full z-50 border-b border-slate-800/60 bg-[#08080c]/80 backdrop-blur-md px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <span class="w-2.5 h-2.5 bg-cyan-400 rounded-full animate-pulse"></span>
+      <h1 class="mono text-xs tracking-widest uppercase font-semibold text-slate-300">
+        SYS.GALLERY <span class="text-slate-600">//</span> ARCHIVE
+      </h1>
+    </div>
+    <div id="status-readout" class="mono text-xs text-cyan-400">
+      [SCANNING_DIRECTORY...]
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="pt-32 pb-10 px-6 max-w-7xl mx-auto">
+    <div class="mono text-cyan-400 text-xs mb-2 tracking-wider">// VISUAL MATRIX</div>
+    <h2 class="text-4xl md:text-6xl font-bold tracking-tight">
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-500">PORTFOLIO</span>
+    </h2>
+  </section>
+
+  <!-- Main Gallery Grid -->
+  <main class="px-6 pb-24 max-w-7xl mx-auto">
+    <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Images auto-populate here via JavaScript -->
+    </div>
+  </main>
+
+  <script>
+    // =========================================================
+    // CONFIGURATION: Set your GitHub Username and Repository
+    // =========================================================
+    const GITHUB_USERNAME = "YOUR_GITHUB_USERNAME";
+    const REPO_NAME = "YOUR_REPO_NAME";
+    const FOLDER_PATH = "images";
+
+    const API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FOLDER_PATH}`;
+
+    async function fetchImages() {
+      const statusReadout = document.getElementById('status-readout');
+      const galleryGrid = document.getElementById('gallery-grid');
+
+      try {
+        const response = await fetch(API_URL);
+        
+        if (!response.ok) {
+          throw new Error("Folder not found or API rate limit reached.");
+        }
+
+        const files = await response.json();
+        
+        // Filter out non-image files
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.cr2'];
+        const imageFiles = files.filter(file => {
+          const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+          return imageExtensions.includes(ext);
+        });
+
+        if (imageFiles.length === 0) {
+          statusReadout.textContent = "[NO_IMAGES_DETECTED]";
+          return;
+        }
+
+        statusReadout.textContent = `[ONLINE // ${imageFiles.length}_UNITS]`;
+        galleryGrid.innerHTML = ""; // Clear loader
+
+        // Generate HTML for each photo without titles/names
+        imageFiles.forEach((file) => {
+          const card = document.createElement('div');
+          card.className = "gallery-card card-frame relative group bg-slate-900/40 border border-slate-800/80 overflow-hidden rounded-sm cursor-pointer";
+
+          card.innerHTML = `
+            <div class="overflow-hidden aspect-[4/3] relative">
+              <img 
+                src="${file.download_url}" 
+                alt="Portfolio Image" 
+                loading="lazy"
+                class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 group-hover:brightness-110 filter grayscale group-hover:grayscale-0"
+              />
+              <!-- Transparent Shield Overlay (Prevents Direct Dragging/Save-As) -->
+              <div class="absolute inset-0 bg-transparent z-20 pointer-events-auto"></div>
+            </div>
+          `;
+
+          galleryGrid.appendChild(card);
+        });
+
+        // Trigger smooth GSAP reveal animation on newly loaded cards
+        gsap.from(".gallery-card", {
+          y: 30,
+          opacity: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power3.out"
+        });
+
+      } catch (error) {
+        console.error("Gallery Error:", error);
+        statusReadout.textContent = "[FETCH_FAILED]";
+        galleryGrid.innerHTML = `
+          <div class="col-span-full text-center py-12 mono text-slate-500 text-sm">
+            // ERROR: COULD NOT LOAD '/images' DIRECTORY.<br/>
+            PLEASE CHECK GITHUB USERNAME / REPO CONFIGURATION IN INDEX.HTML
+          </div>
+        `;
+      }
+    }
+
+    // Run directory scan on load
+    fetchImages();
+  </script>
+</body>
+</html>
