@@ -18,7 +18,7 @@
     body { font-family: 'Space Grotesk', sans-serif; }
     .mono { font-family: 'Fira Code', monospace; }
     
-    /* Sci-Fi Grid Overlay Background */
+    /* Sci-Fi Grid Background */
     .bg-grid {
       background-size: 40px 40px;
       background-image: 
@@ -26,7 +26,7 @@
         linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     }
 
-    /* Subtle Vignette */
+    /* Subtle Outer Vignette */
     .vignette {
       background: radial-gradient(circle, transparent 60%, rgba(8, 8, 12, 0.9) 100%);
     }
@@ -35,9 +35,9 @@
     .card-frame::before, .card-frame::after {
       content: '';
       position: absolute;
-      width: 8px;
-      height: 8px;
-      border-color: rgba(6, 182, 212, 0.8);
+      width: 10px;
+      height: 10px;
+      border-color: rgba(6, 182, 212, 0.85);
       opacity: 0;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       pointer-events: none;
@@ -45,9 +45,9 @@
     }
     .card-frame::before { top: -2px; left: -2px; border-top: 2px solid; border-left: 2px solid; }
     .card-frame::after { bottom: -2px; right: -2px; border-bottom: 2px solid; border-right: 2px solid; }
-    .card-frame:hover::before, .card-frame:hover::after { opacity: 1; transform: scale(1.2); }
+    .card-frame:hover::before, .card-frame:hover::after { opacity: 1; transform: scale(1.25); }
 
-    /* Disable Image Dragging & Selection */
+    /* Disable Image Dragging & Text Selection */
     img {
       -webkit-user-drag: none;
       -khtml-user-drag: none;
@@ -60,7 +60,7 @@
 </head>
 <body class="bg-grid min-h-screen relative overflow-x-hidden" oncontextmenu="return false;">
 
-  <!-- Vignette Layer -->
+  <!-- Vignette Overlay -->
   <div class="fixed inset-0 vignette pointer-events-none z-10"></div>
 
   <!-- Header / HUD Navigation -->
@@ -68,7 +68,7 @@
     <div class="flex items-center gap-3">
       <span class="w-2.5 h-2.5 bg-cyan-400 rounded-full animate-pulse"></span>
       <h1 class="mono text-xs tracking-widest uppercase font-semibold text-slate-300">
-        SYS.GALLERY <span class="text-slate-600">//</span> ARCHIVE
+        SYS.GALLERY <span class="text-slate-600">//</span> ARXELECTRIC
       </h1>
     </div>
     <div id="status-readout" class="mono text-xs text-cyan-400">
@@ -87,16 +87,16 @@
   <!-- Main Gallery Grid -->
   <main class="px-6 pb-24 max-w-7xl mx-auto">
     <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Images auto-populate here via JavaScript -->
+      <!-- Images populate automatically here -->
     </div>
   </main>
 
   <script>
     // =========================================================
-    // CONFIGURATION: Set your GitHub Username and Repository
+    // CONFIGURATION
     // =========================================================
-    const GITHUB_USERNAME = "YOUR_GITHUB_USERNAME";
-    const REPO_NAME = "YOUR_REPO_NAME";
+    const GITHUB_USERNAME = "ARXELECTRIC";
+    const REPO_NAME = "portfolio"; // Change this if your repository has a different name
     const FOLDER_PATH = "images";
 
     const API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FOLDER_PATH}`;
@@ -109,12 +109,12 @@
         const response = await fetch(API_URL);
         
         if (!response.ok) {
-          throw new Error("Folder not found or API rate limit reached.");
+          throw new Error("Folder not found or API limits reached.");
         }
 
         const files = await response.json();
         
-        // Filter out non-image files
+        // Allowed formats
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.cr2'];
         const imageFiles = files.filter(file => {
           const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
@@ -123,13 +123,18 @@
 
         if (imageFiles.length === 0) {
           statusReadout.textContent = "[NO_IMAGES_DETECTED]";
+          galleryGrid.innerHTML = `
+            <div class="col-span-full text-center py-12 mono text-slate-500 text-sm">
+              // NO IMAGES FOUND IN THE '/images' FOLDER YET.
+            </div>
+          `;
           return;
         }
 
         statusReadout.textContent = `[ONLINE // ${imageFiles.length}_UNITS]`;
-        galleryGrid.innerHTML = ""; // Clear loader
+        galleryGrid.innerHTML = ""; // Clear loader state
 
-        // Generate HTML for each photo without titles/names
+        // Render pure image cards with no titles/metadata
         imageFiles.forEach((file) => {
           const card = document.createElement('div');
           card.className = "gallery-card card-frame relative group bg-slate-900/40 border border-slate-800/80 overflow-hidden rounded-sm cursor-pointer";
@@ -138,11 +143,11 @@
             <div class="overflow-hidden aspect-[4/3] relative">
               <img 
                 src="${file.download_url}" 
-                alt="Portfolio Image" 
+                alt="Portfolio Item" 
                 loading="lazy"
                 class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 group-hover:brightness-110 filter grayscale group-hover:grayscale-0"
               />
-              <!-- Transparent Shield Overlay (Prevents Direct Dragging/Save-As) -->
+              <!-- Shield Layer (Prevents Dragging / Direct Save) -->
               <div class="absolute inset-0 bg-transparent z-20 pointer-events-auto"></div>
             </div>
           `;
@@ -150,7 +155,7 @@
           galleryGrid.appendChild(card);
         });
 
-        // Trigger smooth GSAP reveal animation on newly loaded cards
+        // Trigger entrance animations
         gsap.from(".gallery-card", {
           y: 30,
           opacity: 0,
@@ -164,14 +169,14 @@
         statusReadout.textContent = "[FETCH_FAILED]";
         galleryGrid.innerHTML = `
           <div class="col-span-full text-center py-12 mono text-slate-500 text-sm">
-            // ERROR: COULD NOT LOAD '/images' DIRECTORY.<br/>
-            PLEASE CHECK GITHUB USERNAME / REPO CONFIGURATION IN INDEX.HTML
+            // ERROR: COULD NOT READ 'https://github.com/ARXELECTRIC/${REPO_NAME}/tree/main/images'<br/>
+            ENSURE YOUR REPOSITORY IS PUBLIC AND CONTAINS AN 'images' FOLDER.
           </div>
         `;
       }
     }
 
-    // Run directory scan on load
+    // Initialize scan
     fetchImages();
   </script>
 </body>
