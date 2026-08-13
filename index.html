@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PORTFOLIO // SYSTEM_GALLERY</title>
+  <title>ARX-UK // SYSTEM_GALLERY</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -68,7 +68,7 @@
     <div class="flex items-center gap-3">
       <span class="w-2.5 h-2.5 bg-cyan-400 rounded-full animate-pulse"></span>
       <h1 class="mono text-xs tracking-widest uppercase font-semibold text-slate-300">
-        SYS.GALLERY <span class="text-slate-600">//</span> ARXELECTRIC
+        ARX-UK <span class="text-slate-600">//</span> GALLERY
       </h1>
     </div>
     <div id="status-readout" class="mono text-xs text-cyan-400">
@@ -80,7 +80,7 @@
   <section class="pt-32 pb-10 px-6 max-w-7xl mx-auto">
     <div class="mono text-cyan-400 text-xs mb-2 tracking-wider">// VISUAL MATRIX</div>
     <h2 class="text-4xl md:text-6xl font-bold tracking-tight">
-      <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-500">PORTFOLIO</span>
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-500">ARX-UK</span>
     </h2>
   </section>
 
@@ -96,7 +96,7 @@
     // CONFIGURATION
     // =========================================================
     const GITHUB_USERNAME = "ARXELECTRIC";
-    const REPO_NAME = "portfolio"; // Change this if your repository has a different name
+    const REPO_NAME = "arx-uk";
     const FOLDER_PATH = "images";
 
     const API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FOLDER_PATH}`;
@@ -143,7 +143,7 @@
             <div class="overflow-hidden aspect-[4/3] relative">
               <img 
                 src="${file.download_url}" 
-                alt="Portfolio Item" 
+                alt="ARX-UK Item" 
                 loading="lazy"
                 class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 group-hover:brightness-110 filter grayscale group-hover:grayscale-0"
               />
@@ -170,7 +170,7 @@
         galleryGrid.innerHTML = `
           <div class="col-span-full text-center py-12 mono text-slate-500 text-sm">
             // ERROR: COULD NOT READ 'https://github.com/ARXELECTRIC/${REPO_NAME}/tree/main/images'<br/>
-            ENSURE YOUR REPOSITORY IS PUBLIC AND CONTAINS AN 'images' FOLDER.
+            ENSURE YOUR REPOSITORY NAME IS 'arx-uk' AND CONTAINS AN 'images' FOLDER.
           </div>
         `;
       }
