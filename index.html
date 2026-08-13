@@ -60,6 +60,24 @@
 </head>
 <body class="bg-grid min-h-screen relative overflow-x-hidden" oncontextmenu="return false;">
 
+  <!-- FIRST-TIME INTRO OVERLAY -->
+  <div id="intro-screen" class="fixed inset-0 z-[100] bg-[#08080c] flex flex-col items-center justify-center border-b-2 border-cyan-500/50">
+    <div class="mono text-center space-y-4 px-4">
+      <div class="flex items-center justify-center gap-2">
+        <span class="w-3 h-3 bg-cyan-400 rounded-full animate-ping"></span>
+        <span class="text-cyan-400 text-xs font-semibold tracking-widest uppercase">// INITIALIZING MATRIX</span>
+      </div>
+      <h1 id="intro-title" class="text-4xl md:text-6xl font-extrabold tracking-widest text-slate-100 opacity-0 transform translate-y-4">
+        ARX-UK
+      </h1>
+      <!-- Progress Bar -->
+      <div class="w-48 md:w-64 h-1 bg-slate-800 rounded-full mx-auto overflow-hidden relative">
+        <div id="loader-bar" class="absolute top-0 left-0 bottom-0 w-0 bg-gradient-to-r from-cyan-400 to-indigo-500"></div>
+      </div>
+      <div id="loader-text" class="text-[10px] text-slate-500 tracking-mono">[0%] CORE_LOAD_SEQUENCE</div>
+    </div>
+  </div>
+
   <!-- Vignette Overlay -->
   <div class="fixed inset-0 vignette pointer-events-none z-10"></div>
 
@@ -78,8 +96,8 @@
 
   <!-- Hero Section -->
   <section class="pt-32 pb-10 px-6 max-w-7xl mx-auto">
-    <div class="mono text-cyan-400 text-xs mb-2 tracking-wider">// VISUAL MATRIX</div>
-    <h2 class="text-4xl md:text-6xl font-bold tracking-tight">
+    <div class="hero-anim mono text-cyan-400 text-xs mb-2 tracking-wider">// VISUAL MATRIX</div>
+    <h2 class="hero-anim text-4xl md:text-6xl font-bold tracking-tight">
       <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-500">ARX-UK</span>
     </h2>
   </section>
@@ -96,10 +114,53 @@
     // CONFIGURATION
     // =========================================================
     const GITHUB_USERNAME = "ARXELECTRIC";
-    const REPO_NAME = "Main-Site";
+    const REPO_NAME = "Main-Site"; // Set to Main-Site or arx-uk depending on your repo name
     const FOLDER_PATH = "images";
 
     const API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FOLDER_PATH}`;
+
+    // Run First-Time Intro Animation
+    function runIntroAnimation(onCompleteCallback) {
+      const introScreen = document.getElementById('intro-screen');
+      const hasVisited = sessionStorage.getItem('arx_visited');
+
+      // If user has already visited during this browser session, skip animation
+      if (hasVisited) {
+        introScreen.style.display = 'none';
+        onCompleteCallback();
+        return;
+      }
+
+      // Mark session as visited
+      sessionStorage.setItem('arx_visited', 'true');
+
+      const tl = gsap.timeline({
+        onComplete: () => {
+          gsap.to(introScreen, {
+            yPercent: -100,
+            duration: 0.8,
+            ease: "power4.inOut",
+            onComplete: () => {
+              introScreen.style.display = 'none';
+              onCompleteCallback();
+            }
+          });
+        }
+      });
+
+      // Animate Loader
+      tl.to("#intro-title", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" })
+        .to("#loader-bar", {
+          width: "100%",
+          duration: 1.2,
+          ease: "power1.inOut",
+          onUpdate: function() {
+            const prog = Math.round(this.progress() * 100);
+            document.getElementById('loader-text').textContent = `[${prog}%] CORE_LOAD_SEQUENCE`;
+          }
+        })
+        .to("#intro-title", { textShadow: "0 0 20px rgba(6,182,212,0.8)", duration: 0.3 });
+    }
 
     async function fetchImages() {
       const statusReadout = document.getElementById('status-readout');
@@ -114,7 +175,6 @@
 
         const files = await response.json();
         
-        // Allowed formats
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.cr2'];
         const imageFiles = files.filter(file => {
           const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
@@ -132,9 +192,8 @@
         }
 
         statusReadout.textContent = `[ONLINE // ${imageFiles.length}_UNITS]`;
-        galleryGrid.innerHTML = ""; // Clear loader state
+        galleryGrid.innerHTML = ""; 
 
-        // Render pure image cards with no titles/metadata
         imageFiles.forEach((file) => {
           const card = document.createElement('div');
           card.className = "gallery-card card-frame relative group bg-slate-900/40 border border-slate-800/80 overflow-hidden rounded-sm cursor-pointer";
@@ -147,7 +206,6 @@
                 loading="lazy"
                 class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 group-hover:brightness-110 filter grayscale group-hover:grayscale-0"
               />
-              <!-- Shield Layer (Prevents Dragging / Direct Save) -->
               <div class="absolute inset-0 bg-transparent z-20 pointer-events-auto"></div>
             </div>
           `;
@@ -155,13 +213,24 @@
           galleryGrid.appendChild(card);
         });
 
-        // Trigger entrance animations
-        gsap.from(".gallery-card", {
-          y: 30,
-          opacity: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power3.out"
+        // Intro sequence controller
+        runIntroAnimation(() => {
+          // Animate Hero text and Gallery cards into view
+          gsap.from(".hero-anim", {
+            y: 20,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: "power2.out"
+          });
+
+          gsap.from(".gallery-card", {
+            y: 40,
+            opacity: 0,
+            duration: 0.7,
+            stagger: 0.1,
+            ease: "power3.out"
+          });
         });
 
       } catch (error) {
@@ -169,14 +238,16 @@
         statusReadout.textContent = "[FETCH_FAILED]";
         galleryGrid.innerHTML = `
           <div class="col-span-full text-center py-12 mono text-slate-500 text-sm">
-            // ERROR: COULD NOT READ 'https://github.com/ARXELECTRIC/${REPO_NAME}/tree/main/images'<br/>
-            ENSURE YOUR REPOSITORY NAME IS 'arx-uk' AND CONTAINS AN 'images' FOLDER.
+            // ERROR: COULD NOT LOAD IMAGES FROM REPOSITORY.<br/>
+            PLEASE VERIFY YOUR REPO_NAME IN INDEX.HTML MATCHES GITHUB.
           </div>
         `;
+        // Hide overlay even if fetch fails
+        document.getElementById('intro-screen').style.display = 'none';
       }
     }
 
-    // Initialize scan
+    // Initialize
     fetchImages();
   </script>
 </body>
