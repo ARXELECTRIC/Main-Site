@@ -174,7 +174,8 @@
 
         const files = await response.json();
         
-        const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.cr2'];
+        // 1. Strict filter for web-compatible image extensions only
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
         const imageFiles = files.filter(file => {
           const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
           return imageExtensions.includes(ext);
@@ -184,7 +185,7 @@
           statusReadout.textContent = "[NO_IMAGES_DETECTED]";
           galleryGrid.innerHTML = `
             <div class="col-span-full text-center py-12 mono text-slate-500 text-sm">
-              // NO IMAGES FOUND IN THE '/images' FOLDER YET.
+              // NO SUPPORTED IMAGES FOUND IN THE '/images' FOLDER YET.
             </div>
           `;
           return;
@@ -193,16 +194,19 @@
         statusReadout.textContent = `[ONLINE // ${imageFiles.length}_UNITS]`;
         galleryGrid.innerHTML = ""; 
 
-        // Generate full-size uncropped image cards
+        // 2. Render cards using direct GitHub raw CDN links
         imageFiles.forEach((file) => {
+          // Direct raw GitHub CDN link fixes CORS/Custom Domain broken icon errors
+          const imageUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/main/${FOLDER_PATH}/${file.name}`;
+
           const card = document.createElement('div');
           card.className = "gallery-card card-frame relative group bg-slate-900/40 border border-slate-800/80 overflow-hidden rounded-sm cursor-pointer break-inside-avoid mb-8";
 
           card.innerHTML = `
             <div class="relative w-full h-auto overflow-hidden">
               <img 
-                src="${file.download_url}" 
-                alt="ARX-UK Item" 
+                src="${imageUrl}" 
+                alt="${file.name}" 
                 loading="lazy"
                 class="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-105 group-hover:brightness-110 filter grayscale group-hover:grayscale-0"
               />
