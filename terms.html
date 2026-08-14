@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-[#08080c] text-slate-200 antialiased selection:bg-cyan-500 selection:text-black">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARX-UK // TERMS_OF_SERVICE</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Space Grotesk', sans-serif; }
+    .mono { font-family: 'Fira Code', monospace; }
+    
+    .bg-grid {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+    .vignette {
+      background: radial-gradient(circle, transparent 60%, rgba(8, 8, 12, 0.9) 100%);
+    }
+  </style>
+</head>
+<body class="bg-grid min-h-screen relative overflow-x-hidden flex flex-col justify-between" oncontextmenu="return false;">
+
+  <!-- Vignette Overlay -->
+  <div class="fixed inset-0 vignette pointer-events-none z-10"></div>
+
+  <div>
+    <!-- Header -->
+    <header class="fixed top-0 left-0 w-full z-50 border-b border-slate-800/60 bg-[#08080c]/80 backdrop-blur-md px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="mono text-xs text-cyan-400 hover:text-cyan-300 border border-cyan-500/40 bg-cyan-950/20 px-2.5 py-1 rounded transition-all">
+          ← BACK_TO_MATRIX
+        </a>
+      </div>
+      <div class="mono text-xs text-cyan-400">
+        [DOC_ID: TERMS_OF_SERVICE]
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-24 px-6 max-w-4xl mx-auto space-y-8 relative z-20">
+      <div>
+        <div class="mono text-cyan-400 text-xs mb-2 tracking-wider">// SYSTEM GOVERNANCE</div>
+        <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-100">TERMS OF SERVICE</h1>
+        <p class="mono text-xs text-slate-500 mt-2">EFFECTIVE DATE: [INSERT DATE] | LOCATION: [YOUR COUNTRY/REGION]</p>
+      </div>
+
+      <div class="space-y-6 text-sm text-slate-300 leading-relaxed border-t border-slate-800 pt-8">
+        
+        <!-- SECTION 1 -->
+        <section class="space-y-2">
+          <h2 class="mono text-cyan-400 font-semibold text-base">// 01. ACCEPTANCE OF TERMS</h2>
+          <p>
+            By accessing or browsing <strong>ARX-UK</strong>, you agree to be bound by these Terms of Service. If you do not agree, please discontinue access to the platform.
+          </p>
+        </section>
+
+        <!-- SECTION 2 -->
+        <section class="space-y-2">
+          <h2 class="mono text-cyan-400 font-semibold text-base">// 02. INTELLECTUAL PROPERTY & COPYRIGHT</h2>
+          <p>
+            All media, photographs, visual artworks, graphics, code, and text published on this repository are the exclusive property of <strong>[Your Name / Business Name]</strong> unless otherwise noted.
+          </p>
+          <ul class="list-disc list-inside space-y-1 text-slate-400 pl-2">
+            <li><strong>No Reproduction:</strong> Unauthorized downloading, copying, modifying, hotlinking, or redistributing of photography work is strictly prohibited.</li>
+            <li><strong>Commercial Use:</strong> Images may not be used for commercial projects, marketing, or AI training datasets without express written licensing consent.</li>
+          </ul>
+        </section>
+
+        <!-- SECTION 3 -->
+        <section class="space-y-2">
+          <h2 class="mono text-cyan-400 font-semibold text-base">// 03. PERMITTED PERSONAL USE</h2>
+          <p>
+            You are granted a limited, non-exclusive license to view the gallery for personal, non-commercial viewing. Sharing direct links to site pages is permitted, provided appropriate attribution to <strong>ARX-UK</strong> is maintained.
+          </p>
+        </section>
+
+        <!-- SECTION 4 -->
+        <section class="space-y-2">
+          <h2 class="mono text-cyan-400 font-semibold text-base">// 04. DISCLAIMER OF WARRANTIES</h2>
+          <p>
+            This website and all included media are provided on an "as is" and "as available" basis without warranties of any kind. We do not guarantee uninterrupted server uptime or error-free script execution.
+          </p>
+        </section>
+
+        <!-- SECTION 5 -->
+        <section class="space-y-2">
+          <h2 class="mono text-cyan-400 font-semibold text-base">// 05. GOVERNING LAW</h2>
+          <p>
+            These terms shall be governed by and construed in accordance with the laws of <strong>[Your Country / Region, e.g., United Kingdom]</strong>.
+          </p>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-40 border-t border-slate-800/80 bg-[#08080c]/90 backdrop-blur-md py-6 px-6 text-slate-500 mono text-xs text-center">
+    © <span id="year"></span> ARX-UK®. ALL RIGHTS RESERVED.
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
