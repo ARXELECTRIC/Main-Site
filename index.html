@@ -119,6 +119,15 @@
 
     const API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FOLDER_PATH}`;
 
+    // Array Randomizer (Fisher-Yates Shuffle)
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
     // Run First-Time Intro Animation
     function runIntroAnimation(onCompleteCallback) {
       const introScreen = document.getElementById('intro-screen');
@@ -174,9 +183,9 @@
 
         const files = await response.json();
         
-        // 1. Strict filter for web-compatible image extensions only
+        // Filter web-compatible formats
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
-        const imageFiles = files.filter(file => {
+        let imageFiles = files.filter(file => {
           const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
           return imageExtensions.includes(ext);
         });
@@ -191,12 +200,14 @@
           return;
         }
 
+        // RANDOMIZE THE IMAGE ORDER
+        imageFiles = shuffleArray(imageFiles);
+
         statusReadout.textContent = `[ONLINE // ${imageFiles.length}_UNITS]`;
         galleryGrid.innerHTML = ""; 
 
-        // 2. Render cards using direct GitHub raw CDN links
+        // Render cards with randomized order
         imageFiles.forEach((file) => {
-          // Direct raw GitHub CDN link fixes CORS/Custom Domain broken icon errors
           const imageUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/main/${FOLDER_PATH}/${file.name}`;
 
           const card = document.createElement('div');
