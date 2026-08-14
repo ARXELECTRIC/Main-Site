@@ -1,213 +1,6 @@
-<!DOCTYPE html>
-<html lang="en" class="bg-[#08080c] text-slate-200 antialiased selection:bg-cyan-500 selection:text-black">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ARX-UK // SYSTEM_GALLERY</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
-  <style>
-    body { font-family: 'Space Grotesk', sans-serif; }
-    .mono { font-family: 'Fira Code', monospace; }
-    
-    .bg-grid {
-      background-size: 40px 40px;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    }
-    .vignette {
-      background: radial-gradient(circle, transparent 60%, rgba(8, 8, 12, 0.9) 100%);
-    }
-    .card-frame::before, .card-frame::after {
-      content: '';
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      border-color: rgba(6, 182, 212, 0.85);
-      opacity: 0;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      pointer-events: none;
-      z-index: 30;
-    }
-    .card-frame::before { top: -2px; left: -2px; border-top: 2px solid; border-left: 2px solid; }
-    .card-frame::after { bottom: -2px; right: -2px; border-bottom: 2px solid; border-right: 2px solid; }
-    .card-frame:hover::before, .card-frame:hover::after,
-    .card-frame.mobile-active::before, .card-frame.mobile-active::after { 
-      opacity: 1; 
-      transform: scale(1.25); 
-    }
-    img {
-      -webkit-user-drag: none;
-      user-drag: none;
-      user-select: none;
-      transition: filter 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s ease-out;
-    }
-    .gallery-card.mobile-active img {
-      filter: grayscale(0) brightness(1.1) !important;
-    }
-  </style>
-</head>
-<body class="bg-grid min-h-screen relative overflow-x-hidden flex flex-col justify-between" oncontextmenu="return false;">
-
-  <!-- INTRO OVERLAY -->
-  <div id="intro-screen" class="fixed inset-0 z-[100] bg-[#08080c] flex flex-col items-center justify-center border-b-2 border-cyan-500/50">
-    <div class="mono text-center space-y-4 px-4">
-      <div class="flex items-center justify-center gap-2">
-        <span class="w-3 h-3 bg-cyan-400 rounded-full animate-ping"></span>
-        <span class="text-cyan-400 text-xs font-semibold tracking-widest uppercase">// INITIALIZING MATRIX</span>
-      </div>
-      <h1 id="intro-title" class="text-4xl md:text-6xl font-extrabold tracking-widest text-slate-100 opacity-0 transform translate-y-4">
-        ARX-UK
-      </h1>
-      <div class="w-48 md:w-64 h-1 bg-slate-800 rounded-full mx-auto overflow-hidden relative">
-        <div id="loader-bar" class="absolute top-0 left-0 bottom-0 w-0 bg-gradient-to-r from-cyan-400 to-indigo-500"></div>
-      </div>
-      <div id="loader-text" class="text-[10px] text-slate-500 tracking-mono">[0%] CORE_LOAD_SEQUENCE</div>
-    </div>
-  </div>
-
-  <!-- DROPDOWN SORTING TAB -->
-  <div id="sorting-banner" class="fixed top-[57px] left-1/2 -translate-x-1/2 z-40 bg-[#08080c]/90 border-x border-b border-cyan-500/40 backdrop-blur-md px-5 py-1.5 rounded-b-md shadow-lg shadow-cyan-950/40 transform -translate-y-full transition-transform duration-500 ease-out flex items-center gap-2.5 mono text-[11px] text-cyan-400 pointer-events-none">
-    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-    <span id="sorting-text" class="tracking-wider font-semibold">SORTING...</span>
-  </div>
-
-  <!-- SIDE MENU -->
-  <div id="side-menu-overlay" onclick="toggleSideMenu()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[80] opacity-0 pointer-events-none transition-opacity duration-300"></div>
-  <aside id="side-menu" class="fixed top-0 left-0 h-full w-72 z-[85] bg-[#08080c]/95 border-r border-cyan-500/30 backdrop-blur-xl p-6 shadow-2xl shadow-cyan-950/50 transform -translate-x-full transition-transform duration-300 ease-out flex flex-col justify-between mono">
-    <div>
-      <div class="flex items-center justify-between pb-6 border-b border-slate-800">
-        <div class="flex items-center gap-2">
-          <span class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
-          <span class="text-xs font-bold tracking-widest text-slate-100">// ARX_NAV</span>
-        </div>
-        <button onclick="toggleSideMenu()" class="text-slate-500 hover:text-cyan-400 text-xs transition-colors">[X]</button>
-      </div>
-      <nav class="mt-8 space-y-4">
-        <div class="text-[10px] text-slate-600 tracking-widest uppercase mb-2">// DIRECTORIES</div>
-        <a href="index.html" class="flex items-center justify-between p-2.5 rounded border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-xs font-semibold tracking-wider transition-all">
-          <span>01. MAIN_MATRIX</span><span>→</span>
-        </a>
-        <a href="downloads.html" class="flex items-center justify-between p-2.5 rounded border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-900 text-slate-300 hover:text-cyan-400 text-xs font-semibold tracking-wider transition-all">
-          <span>02. DOWNLOADS</span><span>→</span>
-        </a>
-        <a href="equipment.html" class="flex items-center justify-between p-2.5 rounded border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-900 text-slate-300 hover:text-cyan-400 text-xs font-semibold tracking-wider transition-all">
-          <span>03. EQUIPMENT</span><span>→</span>
-        </a>
-      </nav>
-    </div>
-    <div class="pt-6 border-t border-slate-800 text-[10px] text-slate-600 space-y-1">
-      <div>SYS_NODE: EDGE_CDN</div>
-      <div>CORE_VER: v2.4.0</div>
-    </div>
-  </aside>
-
-  <div class="fixed inset-0 vignette pointer-events-none z-10"></div>
-
-  <div>
-    <!-- Header -->
-    <header class="fixed top-0 left-0 w-full z-50 border-b border-slate-800/60 bg-[#08080c]/80 backdrop-blur-md px-6 py-4 flex justify-between items-center">
-      <div class="flex items-center gap-4">
-        <button onclick="toggleSideMenu()" class="mono text-xs text-cyan-400 hover:text-cyan-300 border border-cyan-500/40 hover:border-cyan-400 bg-cyan-950/20 px-2.5 py-1 rounded transition-all flex items-center gap-2">
-          <span class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
-          <span>// MENU</span>
-        </button>
-        <h1 class="mono text-xs tracking-widest uppercase font-semibold text-slate-300 hidden sm:block">
-          ARX-UK <span class="text-slate-600">//</span> GALLERY
-        </h1>
-      </div>
-      <div id="status-readout" class="mono text-xs text-cyan-400">[SCANNING_DIRECTORY...]</div>
-    </header>
-
-    <!-- Hero -->
-    <section class="pt-32 pb-10 px-6 max-w-7xl mx-auto">
-      <div class="hero-anim mono text-cyan-400 text-xs mb-2 tracking-wider">// VISUAL MATRIX</div>
-      <h2 class="hero-anim text-4xl md:text-6xl font-bold tracking-tight">
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-500">ARX-UK</span>
-      </h2>
-    </section>
-
-    <!-- Grid -->
-    <main class="px-6 pb-24 max-w-7xl mx-auto">
-      <div id="gallery-grid" class="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8"></div>
-    </main>
-  </div>
-
-  <!-- FOOTER -->
-  <footer class="relative z-40 border-t border-slate-800/80 bg-[#08080c]/90 backdrop-blur-md pt-12 pb-8 px-6 text-slate-400 mono text-xs">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-slate-800/50">
-      
-      <!-- Column 1: Brand -->
-      <div class="space-y-3 md:col-span-1">
-        <div class="flex items-center gap-1.5 font-extrabold text-slate-100 text-base tracking-wider">
-          <span>ARX-UK</span>
-          <span class="text-[10px] align-top text-cyan-400 border border-cyan-400/40 rounded-full w-4 h-4 flex items-center justify-center">®</span>
-        </div>
-        <p class="text-[11px] text-slate-500 leading-relaxed">
-          High-performance visual matrix and digital art repository. All media encrypted and protected.
-        </p>
-        <div class="flex items-center gap-2 text-[10px] text-cyan-400/80 pt-2">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>SYSTEM_STATUS: OPERATIONAL</span>
-        </div>
-      </div>
-
-      <!-- Column 2: Navigation -->
-      <div class="space-y-2">
-        <h3 class="text-slate-200 font-semibold tracking-wider uppercase text-[11px] mb-3 text-cyan-400">// NAVIGATION</h3>
-        <ul class="space-y-1.5 text-[11px]">
-          <li><a href="index.html" class="hover:text-cyan-400 transition-colors">MAIN_MATRIX</a></li>
-          <li><a href="downloads.html" class="hover:text-cyan-400 transition-colors">DOWNLOADS</a></li>
-          <li><a href="equipment.html" class="hover:text-cyan-400 transition-colors">EQUIPMENT</a></li>
-        </ul>
-      </div>
-
-      <!-- Column 3: Legal -->
-      <div class="space-y-2">
-        <h3 class="text-slate-200 font-semibold tracking-wider uppercase text-[11px] mb-3 text-cyan-400">// COMPLIANCE</h3>
-        <ul class="space-y-1.5 text-[11px]">
-          <li><a href="privacy.html" class="hover:text-cyan-400 transition-colors">PRIVACY_POLICY</a></li>
-          <li><a href="terms.html" class="hover:text-cyan-400 transition-colors">TERMS_OF_SERVICE</a></li>
-        </ul>
-      </div>
-
-      <!-- Column 4: Web Development Services & Contact -->
-      <div class="space-y-2">
-        <h3 class="text-slate-200 font-semibold tracking-wider uppercase text-[11px] mb-3 text-cyan-400">// SERVICES & INQUIRIES</h3>
-        <p class="text-[11px] text-slate-500 leading-relaxed mb-2">
-          Custom high-performance web development, static architecture, and creative visual platforms built by ARX-UK.
-        </p>
-        <div class="bg-slate-950/60 border border-slate-800 p-3 rounded text-[10px] space-y-1 text-slate-500">
-          <div>WEB_DEV_INQUIRIES:</div>
-          <div><a href="mailto:website@arx-uk.com" class="text-cyan-400 hover:underline font-semibold">website@arx-uk.com</a></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Bottom Bar with "WEBSITE BY ARX-UK" -->
-    <div class="max-w-7xl mx-auto pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] text-slate-500">
-      <div class="flex items-center gap-2">
-        <span>© <span id="year"></span> ARX-UK®. ALL RIGHTS RESERVED.</span>
-        <span>|</span>
-        <span class="text-cyan-400 font-semibold">WEBSITE BY ARX-UK</span>
-      </div>
-      <div class="flex gap-4">
-        <span class="hover:text-slate-300 transition-colors">v2.4.0_PROD</span>
-        <span>•</span>
-        <span class="hover:text-slate-300 transition-colors">BUILD: 2026.08</span>
-      </div>
-    </div>
-  </footer>
-
-  <script>
+<script>
     document.getElementById('year').textContent = new Date().getFullYear();
+    
     function toggleSideMenu() {
       const menu = document.getElementById('side-menu');
       const overlay = document.getElementById('side-menu-overlay');
@@ -227,6 +20,7 @@
     const API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FOLDER_PATH}`;
 
     let sortingDotInterval = null;
+    let mobileObserver = null; // Global observer variable
 
     function startSortingAnimation() {
       const banner = document.getElementById('sorting-banner');
@@ -264,17 +58,17 @@
       });
     }
 
-    function setupMobileScrollColorizer() {
+    // Initialize the observer ONCE before images start loading
+    function initMobileScrollColorizer() {
       const isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth <= 768);
       if (!isMobile) return;
-      const observer = new IntersectionObserver((entries) => {
+      
+      mobileObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) entry.target.classList.add('mobile-active');
           else entry.target.classList.remove('mobile-active');
         });
       }, { rootMargin: '-20% 0px -20% 0px', threshold: 0.35 });
-
-      document.querySelectorAll('.gallery-card').forEach((card) => observer.observe(card));
     }
 
     function revealGalleryContent() {
@@ -303,7 +97,10 @@
     async function fetchImages() {
       const statusReadout = document.getElementById('status-readout');
       const galleryGrid = document.getElementById('gallery-grid');
+      
       startSortingAnimation();
+      initMobileScrollColorizer(); // Boot up the tracker immediately
+      
       try {
         const response = await fetch(API_URL);
         if (!response.ok) throw new Error("Folder not found.");
@@ -329,10 +126,14 @@
             card.className = "gallery-card card-frame relative group bg-slate-900/40 border border-slate-800/80 overflow-hidden rounded-sm cursor-pointer break-inside-avoid mb-8";
             card.innerHTML = `<div class="relative w-full h-auto overflow-hidden"><img src="${imageUrl}" loading="lazy" class="w-full h-auto block filter grayscale group-hover:grayscale-0 group-hover:scale-105 group-hover:brightness-110"/><div class="absolute inset-0 bg-transparent z-20 pointer-events-auto"></div></div>`;
             galleryGrid.appendChild(card);
+            
+            // Watch this specific card the second it hits the page
+            if (mobileObserver) {
+              mobileObserver.observe(card);
+            }
           }
         }
         statusReadout.textContent = `[ONLINE // ${loadedCount}_UNITS]`;
-        setupMobileScrollColorizer();
       } catch (error) {
         statusReadout.textContent = "[FETCH_FAILED]";
       } finally {
@@ -343,5 +144,3 @@
     startIntroSequence();
     fetchImages();
   </script>
-</body>
-</html>
