@@ -114,7 +114,7 @@
     // CONFIGURATION
     // =========================================================
     const GITHUB_USERNAME = "ARXELECTRIC";
-    const REPO_NAME = "Main-Site"; // Set to Main-Site or arx-uk depending on your repo name
+    const REPO_NAME = "Main-Site"; // Matches your repository name
     const FOLDER_PATH = "images";
 
     const API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FOLDER_PATH}`;
@@ -183,7 +183,7 @@
 
         const files = await response.json();
         
-        // Filter web-compatible formats
+        // Filter web-compatible formats (.jpg, .jpeg, .png, .webp, .gif)
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
         let imageFiles = files.filter(file => {
           const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
@@ -194,21 +194,21 @@
           statusReadout.textContent = "[NO_IMAGES_DETECTED]";
           galleryGrid.innerHTML = `
             <div class="col-span-full text-center py-12 mono text-slate-500 text-sm">
-              // NO SUPPORTED IMAGES FOUND IN THE '/images' FOLDER YET.
+              // NO SUPPORTED IMAGES FOUND (.jpg, .png, .webp ONLY).
             </div>
           `;
           return;
         }
 
-        // RANDOMIZE THE IMAGE ORDER
+        // Shuffle image order randomly on every load
         imageFiles = shuffleArray(imageFiles);
 
         statusReadout.textContent = `[ONLINE // ${imageFiles.length}_UNITS]`;
         galleryGrid.innerHTML = ""; 
 
-        // Render cards with randomized order
+        // Render cards using relative paths
         imageFiles.forEach((file) => {
-          const imageUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/main/${FOLDER_PATH}/${file.name}`;
+          const imageUrl = `./${FOLDER_PATH}/${file.name}`;
 
           const card = document.createElement('div');
           card.className = "gallery-card card-frame relative group bg-slate-900/40 border border-slate-800/80 overflow-hidden rounded-sm cursor-pointer break-inside-avoid mb-8";
@@ -219,6 +219,7 @@
                 src="${imageUrl}" 
                 alt="${file.name}" 
                 loading="lazy"
+                onerror="this.closest('.gallery-card').remove();"
                 class="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-105 group-hover:brightness-110 filter grayscale group-hover:grayscale-0"
               />
               <!-- Shield Layer (Prevents Dragging / Direct Save) -->
@@ -231,21 +232,8 @@
 
         // Intro sequence controller
         runIntroAnimation(() => {
-          gsap.from(".hero-anim", {
-            y: 20,
-            opacity: 0,
-            duration: 0.6,
-            stagger: 0.1,
-            ease: "power2.out"
-          });
-
-          gsap.from(".gallery-card", {
-            y: 40,
-            opacity: 0,
-            duration: 0.7,
-            stagger: 0.1,
-            ease: "power3.out"
-          });
+          gsap.from(".hero-anim", { y: 20, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" });
+          gsap.from(".gallery-card", { y: 40, opacity: 0, duration: 0.7, stagger: 0.1, ease: "power3.out" });
         });
 
       } catch (error) {
@@ -253,8 +241,7 @@
         statusReadout.textContent = "[FETCH_FAILED]";
         galleryGrid.innerHTML = `
           <div class="col-span-full text-center py-12 mono text-slate-500 text-sm">
-            // ERROR: COULD NOT LOAD IMAGES FROM REPOSITORY.<br/>
-            PLEASE VERIFY YOUR REPO_NAME IN INDEX.HTML MATCHES GITHUB.
+            // ERROR: COULD NOT LOAD IMAGES FROM REPOSITORY.
           </div>
         `;
         document.getElementById('intro-screen').style.display = 'none';
