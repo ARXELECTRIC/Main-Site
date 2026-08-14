@@ -56,9 +56,21 @@
       user-drag: none;
       user-select: none;
     }
+
+    /* Suppress broken image icon placeholders and alt text rendering */
+    img:hover::before, img::before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #08080c;
+    }
   </style>
 </head>
-<body class="bg-grid min-h-screen relative overflow-x-hidden" oncontextmenu="return false;">
+<body class="bg-grid min-h-screen relative overflow-x-hidden flex flex-col justify-between" oncontextmenu="return false;">
 
   <!-- FIRST-TIME INTRO OVERLAY -->
   <div id="intro-screen" class="fixed inset-0 z-[100] bg-[#08080c] flex flex-col items-center justify-center border-b-2 border-cyan-500/50">
@@ -81,40 +93,158 @@
   <!-- Vignette Overlay -->
   <div class="fixed inset-0 vignette pointer-events-none z-10"></div>
 
-  <!-- Header / HUD Navigation -->
-  <header class="fixed top-0 left-0 w-full z-50 border-b border-slate-800/60 bg-[#08080c]/80 backdrop-blur-md px-6 py-4 flex justify-between items-center">
-    <div class="flex items-center gap-3">
-      <span class="w-2.5 h-2.5 bg-cyan-400 rounded-full animate-pulse"></span>
-      <h1 class="mono text-xs tracking-widest uppercase font-semibold text-slate-300">
-        ARX-UK <span class="text-slate-600">//</span> GALLERY
-      </h1>
-    </div>
-    <div id="status-readout" class="mono text-xs text-cyan-400">
-      [SCANNING_DIRECTORY...]
-    </div>
-  </header>
+  <!-- Main Content Wrapper -->
+  <div>
+    <!-- Header / HUD Navigation -->
+    <header class="fixed top-0 left-0 w-full z-50 border-b border-slate-800/60 bg-[#08080c]/80 backdrop-blur-md px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <span class="w-2.5 h-2.5 bg-cyan-400 rounded-full animate-pulse"></span>
+        <h1 class="mono text-xs tracking-widest uppercase font-semibold text-slate-300">
+          ARX-UK <span class="text-slate-600">//</span> GALLERY
+        </h1>
+      </div>
+      <div id="status-readout" class="mono text-xs text-cyan-400">
+        [SCANNING_DIRECTORY...]
+      </div>
+    </header>
 
-  <!-- Hero Section -->
-  <section class="pt-32 pb-10 px-6 max-w-7xl mx-auto">
-    <div class="hero-anim mono text-cyan-400 text-xs mb-2 tracking-wider">// VISUAL MATRIX</div>
-    <h2 class="hero-anim text-4xl md:text-6xl font-bold tracking-tight">
-      <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-500">ARX-UK</span>
-    </h2>
-  </section>
+    <!-- Hero Section -->
+    <section class="pt-32 pb-10 px-6 max-w-7xl mx-auto">
+      <div class="hero-anim mono text-cyan-400 text-xs mb-2 tracking-wider">// VISUAL MATRIX</div>
+      <h2 class="hero-anim text-4xl md:text-6xl font-bold tracking-tight">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-500">ARX-UK</span>
+      </h2>
+    </section>
 
-  <!-- Main Gallery Grid (Masonry Columns for Full Uncropped Aspect Ratios) -->
-  <main class="px-6 pb-24 max-w-7xl mx-auto">
-    <div id="gallery-grid" class="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
-      <!-- Images populate automatically here -->
+    <!-- Main Gallery Grid -->
+    <main class="px-6 pb-24 max-w-7xl mx-auto">
+      <div id="gallery-grid" class="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+        <!-- Images populate automatically here -->
+      </div>
+    </main>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- FOOTER -->
+  <!-- ========================================================= -->
+  <footer class="relative z-40 border-t border-slate-800/80 bg-[#08080c]/90 backdrop-blur-md pt-12 pb-8 px-6 text-slate-400 mono text-xs">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-slate-800/50">
+      
+      <!-- Brand & Registered Logo -->
+      <div class="space-y-3 md:col-span-1">
+        <div class="flex items-center gap-1.5 font-extrabold text-slate-100 text-base tracking-wider">
+          <span>ARX-UK</span>
+          <span class="text-[10px] align-top text-cyan-400 border border-cyan-400/40 rounded-full w-4 h-4 flex items-center justify-center">®</span>
+        </div>
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          High-performance visual matrix and digital art repository. All media encrypted and protected.
+        </p>
+        <div class="flex items-center gap-2 text-[10px] text-cyan-400/80 pt-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>SYSTEM_STATUS: OPERATIONAL</span>
+        </div>
+      </div>
+
+      <!-- Quick Navigation Links -->
+      <div class="space-y-2">
+        <h3 class="text-slate-200 font-semibold tracking-wider uppercase text-[11px] mb-3 text-cyan-400">// NAVIGATION</h3>
+        <ul class="space-y-1.5 text-[11px]">
+          <li><a href="#" class="hover:text-cyan-400 transition-colors">MAIN_MATRIX</a></li>
+          <li><a href="#" class="hover:text-cyan-400 transition-colors">SYSTEM_GALLERY</a></li>
+          <li><a href="#" class="hover:text-cyan-400 transition-colors">ARCHIVE_INDEX</a></li>
+        </ul>
+      </div>
+
+      <!-- Legal Links -->
+      <div class="space-y-2">
+        <h3 class="text-slate-200 font-semibold tracking-wider uppercase text-[11px] mb-3 text-cyan-400">// COMPLIANCE</h3>
+        <ul class="space-y-1.5 text-[11px]">
+          <li><a href="#" class="hover:text-cyan-400 transition-colors">PRIVACY_POLICY</a></li>
+          <li><a href="#" class="hover:text-cyan-400 transition-colors">TERMS_OF_SERVICE</a></li>
+          <li>
+            <button onclick="toggleCookieBanner()" class="hover:text-cyan-400 transition-colors text-left underline decoration-cyan-500/40 underline-offset-4">
+              [COOKIE_SETTINGS]
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Encryption / Technical Readout -->
+      <div class="space-y-2">
+        <h3 class="text-slate-200 font-semibold tracking-wider uppercase text-[11px] mb-3 text-cyan-400">// PROTOCOL</h3>
+        <div class="bg-slate-950/60 border border-slate-800 p-3 rounded text-[10px] space-y-1 text-slate-500">
+          <div>SERVER: GITHUB_CDN</div>
+          <div>ENCRYPTION: TLS_1.3_SECURE</div>
+          <div>LOC: GLOBAL_EDGE</div>
+        </div>
+      </div>
+
     </div>
-  </main>
+
+    <!-- Bottom Bar -->
+    <div class="max-w-7xl mx-auto pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] text-slate-500">
+      <div>
+        © <span id="year"></span> ARX-UK®. ALL RIGHTS RESERVED.
+      </div>
+      <div class="flex gap-4">
+        <span class="hover:text-slate-300 transition-colors">v2.4.0_PROD</span>
+        <span>•</span>
+        <span class="hover:text-slate-300 transition-colors">BUILD: 2026.08</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================= -->
+  <!-- COOKIE CONSENT BANNER -->
+  <!-- ========================================================= -->
+  <div id="cookie-banner" class="fixed bottom-4 right-4 z-[90] max-w-md bg-[#08080c]/95 border border-cyan-500/40 backdrop-blur-lg p-5 rounded shadow-2xl shadow-cyan-950/50 mono text-xs hidden">
+    <div class="flex items-center gap-2 mb-2 text-cyan-400 font-semibold uppercase tracking-wider text-[11px]">
+      <span class="w-2 h-2 bg-cyan-400 rounded-full animate-ping"></span>
+      // COOKIE_TELEMETRY_NOTICE
+    </div>
+    <p class="text-[11px] text-slate-400 leading-relaxed mb-4">
+      ARX-UK uses minimal local browser storage to keep track of your session and optimize site load performance. No tracking or third-party cookies are deployed.
+    </p>
+    <div class="flex gap-3 justify-end">
+      <button onclick="acceptCookies()" class="bg-cyan-500 hover:bg-cyan-400 text-black font-semibold px-4 py-1.5 rounded transition-all text-[11px]">
+        ACCEPT_ALL
+      </button>
+      <button onclick="toggleCookieBanner()" class="border border-slate-700 hover:border-slate-500 text-slate-300 px-3 py-1.5 rounded transition-all text-[11px]">
+        DISMISS
+      </button>
+    </div>
+  </div>
 
   <script>
+    // Set Footer Copyright Year Automatically
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Cookie Banner Logic
+    function checkCookieConsent() {
+      const consent = localStorage.getItem('arx_cookie_consent');
+      if (!consent) {
+        document.getElementById('cookie-banner').classList.remove('hidden');
+      }
+    }
+
+    function acceptCookies() {
+      localStorage.setItem('arx_cookie_consent', 'accepted');
+      document.getElementById('cookie-banner').classList.add('hidden');
+    }
+
+    function toggleCookieBanner() {
+      const banner = document.getElementById('cookie-banner');
+      banner.classList.toggle('hidden');
+    }
+
+    // Trigger cookie check after page load
+    setTimeout(checkCookieConsent, 1500);
+
     // =========================================================
-    // CONFIGURATION
+    // CONFIGURATION & GALLERY SCRIPT
     // =========================================================
     const GITHUB_USERNAME = "ARXELECTRIC";
-    const REPO_NAME = "Main-Site"; // Matches your repository name
+    const REPO_NAME = "Main-Site"; // Matches repository name
     const FOLDER_PATH = "images";
 
     const API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FOLDER_PATH}`;
@@ -126,6 +256,16 @@
         [array[i], array[j]] = [array[j], array[i]];
       }
       return array;
+    }
+
+    // Helper function to test if an image URL is valid before creating DOM elements
+    function checkImageLoads(url) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+      });
     }
 
     // Run First-Time Intro Animation
@@ -202,33 +342,39 @@
 
         // Shuffle image order randomly on every load
         imageFiles = shuffleArray(imageFiles);
-
-        statusReadout.textContent = `[ONLINE // ${imageFiles.length}_UNITS]`;
         galleryGrid.innerHTML = ""; 
 
-        // Render cards using relative paths
-        imageFiles.forEach((file) => {
+        let loadedCount = 0;
+
+        // Process images and only render ones that pass the load check
+        for (const file of imageFiles) {
           const imageUrl = `./${FOLDER_PATH}/${file.name}`;
+          
+          // Pre-verify image URL before generating HTML
+          const isValid = await checkImageLoads(imageUrl);
+          
+          if (isValid) {
+            loadedCount++;
+            const card = document.createElement('div');
+            card.className = "gallery-card card-frame relative group bg-slate-900/40 border border-slate-800/80 overflow-hidden rounded-sm cursor-pointer break-inside-avoid mb-8";
 
-          const card = document.createElement('div');
-          card.className = "gallery-card card-frame relative group bg-slate-900/40 border border-slate-800/80 overflow-hidden rounded-sm cursor-pointer break-inside-avoid mb-8";
+            card.innerHTML = `
+              <div class="relative w-full h-auto overflow-hidden">
+                <img 
+                  src="${imageUrl}" 
+                  loading="lazy"
+                  class="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-105 group-hover:brightness-110 filter grayscale group-hover:grayscale-0"
+                />
+                <!-- Shield Layer (Prevents Dragging / Direct Save) -->
+                <div class="absolute inset-0 bg-transparent z-20 pointer-events-auto"></div>
+              </div>
+            `;
 
-          card.innerHTML = `
-            <div class="relative w-full h-auto overflow-hidden">
-              <img 
-                src="${imageUrl}" 
-                alt="${file.name}" 
-                loading="lazy"
-                onerror="this.closest('.gallery-card').remove();"
-                class="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-105 group-hover:brightness-110 filter grayscale group-hover:grayscale-0"
-              />
-              <!-- Shield Layer (Prevents Dragging / Direct Save) -->
-              <div class="absolute inset-0 bg-transparent z-20 pointer-events-auto"></div>
-            </div>
-          `;
+            galleryGrid.appendChild(card);
+          }
+        }
 
-          galleryGrid.appendChild(card);
-        });
+        statusReadout.textContent = `[ONLINE // ${loadedCount}_UNITS]`;
 
         // Intro sequence controller
         runIntroAnimation(() => {
