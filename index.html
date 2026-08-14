@@ -5,33 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ARX-UK // SYSTEM_GALLERY</title>
   
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
-  <!-- GSAP Animation Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
   <style>
     body { font-family: 'Space Grotesk', sans-serif; }
     .mono { font-family: 'Fira Code', monospace; }
     
-    /* Sci-Fi Grid Background */
     .bg-grid {
       background-size: 40px 40px;
       background-image: 
         linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     }
-
-    /* Subtle Outer Vignette */
     .vignette {
       background: radial-gradient(circle, transparent 60%, rgba(8, 8, 12, 0.9) 100%);
     }
-
-    /* Target Reticle Effect */
     .card-frame::before, .card-frame::after {
       content: '';
       position: absolute;
@@ -50,39 +42,20 @@
       opacity: 1; 
       transform: scale(1.25); 
     }
-
-    /* Disable Image Dragging & Text Selection */
     img {
       -webkit-user-drag: none;
-      -khtml-user-drag: none;
-      -moz-user-drag: none;
-      -o-user-drag: none;
       user-drag: none;
       user-select: none;
       transition: filter 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s ease-out;
     }
-
-    /* Color active state for mobile scroll */
     .gallery-card.mobile-active img {
       filter: grayscale(0) brightness(1.1) !important;
-    }
-
-    /* Suppress broken image icon placeholders and alt text rendering */
-    img:hover::before, img::before {
-      content: "";
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #08080c;
     }
   </style>
 </head>
 <body class="bg-grid min-h-screen relative overflow-x-hidden flex flex-col justify-between" oncontextmenu="return false;">
 
-  <!-- FIRST-TIME INTRO OVERLAY -->
+  <!-- INTRO OVERLAY -->
   <div id="intro-screen" class="fixed inset-0 z-[100] bg-[#08080c] flex flex-col items-center justify-center border-b-2 border-cyan-500/50">
     <div class="mono text-center space-y-4 px-4">
       <div class="flex items-center justify-center gap-2">
@@ -92,7 +65,6 @@
       <h1 id="intro-title" class="text-4xl md:text-6xl font-extrabold tracking-widest text-slate-100 opacity-0 transform translate-y-4">
         ARX-UK
       </h1>
-      <!-- Progress Bar -->
       <div class="w-48 md:w-64 h-1 bg-slate-800 rounded-full mx-auto overflow-hidden relative">
         <div id="loader-bar" class="absolute top-0 left-0 bottom-0 w-0 bg-gradient-to-r from-cyan-400 to-indigo-500"></div>
       </div>
@@ -106,12 +78,10 @@
     <span id="sorting-text" class="tracking-wider font-semibold">SORTING...</span>
   </div>
 
-  <!-- LEFT SIDE NAV MENU (DRAWER & BACKDROP) -->
+  <!-- SIDE MENU -->
   <div id="side-menu-overlay" onclick="toggleSideMenu()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[80] opacity-0 pointer-events-none transition-opacity duration-300"></div>
-  
   <aside id="side-menu" class="fixed top-0 left-0 h-full w-72 z-[85] bg-[#08080c]/95 border-r border-cyan-500/30 backdrop-blur-xl p-6 shadow-2xl shadow-cyan-950/50 transform -translate-x-full transition-transform duration-300 ease-out flex flex-col justify-between mono">
     <div>
-      <!-- Drawer Header -->
       <div class="flex items-center justify-between pb-6 border-b border-slate-800">
         <div class="flex items-center gap-2">
           <span class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
@@ -119,56 +89,43 @@
         </div>
         <button onclick="toggleSideMenu()" class="text-slate-500 hover:text-cyan-400 text-xs transition-colors">[X]</button>
       </div>
-
-      <!-- Navigation Links -->
       <nav class="mt-8 space-y-4">
         <div class="text-[10px] text-slate-600 tracking-widest uppercase mb-2">// DIRECTORIES</div>
         <a href="index.html" class="flex items-center justify-between p-2.5 rounded border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-xs font-semibold tracking-wider transition-all">
-          <span>01. MAIN_MATRIX</span>
-          <span>→</span>
+          <span>01. MAIN_MATRIX</span><span>→</span>
         </a>
         <a href="downloads.html" class="flex items-center justify-between p-2.5 rounded border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-900 text-slate-300 hover:text-cyan-400 text-xs font-semibold tracking-wider transition-all">
-          <span>02. DOWNLOADS</span>
-          <span>→</span>
+          <span>02. DOWNLOADS</span><span>→</span>
         </a>
         <a href="equipment.html" class="flex items-center justify-between p-2.5 rounded border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-900 text-slate-300 hover:text-cyan-400 text-xs font-semibold tracking-wider transition-all">
-          <span>03. EQUIPMENT</span>
-          <span>→</span>
+          <span>03. EQUIPMENT</span><span>→</span>
         </a>
       </nav>
     </div>
-
-    <!-- Drawer Footer -->
     <div class="pt-6 border-t border-slate-800 text-[10px] text-slate-600 space-y-1">
       <div>SYS_NODE: EDGE_CDN</div>
       <div>CORE_VER: v2.4.0</div>
     </div>
   </aside>
 
-  <!-- Vignette Overlay -->
   <div class="fixed inset-0 vignette pointer-events-none z-10"></div>
 
-  <!-- Main Content Wrapper -->
   <div>
-    <!-- Header / HUD Navigation -->
+    <!-- Header -->
     <header class="fixed top-0 left-0 w-full z-50 border-b border-slate-800/60 bg-[#08080c]/80 backdrop-blur-md px-6 py-4 flex justify-between items-center">
       <div class="flex items-center gap-4">
-        <!-- MENU TOGGLE BUTTON -->
         <button onclick="toggleSideMenu()" class="mono text-xs text-cyan-400 hover:text-cyan-300 border border-cyan-500/40 hover:border-cyan-400 bg-cyan-950/20 px-2.5 py-1 rounded transition-all flex items-center gap-2">
           <span class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
           <span>// MENU</span>
         </button>
-
         <h1 class="mono text-xs tracking-widest uppercase font-semibold text-slate-300 hidden sm:block">
-          ARX-UK <span class="text-slate-600">//</span> GALLERY
+          WEBSITE BY ARX-UK <span class="text-slate-600">//</span> GALLERY
         </h1>
       </div>
-      <div id="status-readout" class="mono text-xs text-cyan-400">
-        [SCANNING_DIRECTORY...]
-      </div>
+      <div id="status-readout" class="mono text-xs text-cyan-400">[SCANNING_DIRECTORY...]</div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="pt-32 pb-10 px-6 max-w-7xl mx-auto">
       <div class="hero-anim mono text-cyan-400 text-xs mb-2 tracking-wider">// VISUAL MATRIX</div>
       <h2 class="hero-anim text-4xl md:text-6xl font-bold tracking-tight">
@@ -176,11 +133,9 @@
       </h2>
     </section>
 
-    <!-- Main Gallery Grid -->
+    <!-- Grid -->
     <main class="px-6 pb-24 max-w-7xl mx-auto">
-      <div id="gallery-grid" class="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
-        <!-- Images populate automatically here -->
-      </div>
+      <div id="gallery-grid" class="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8"></div>
     </main>
   </div>
 
@@ -188,10 +143,9 @@
   <footer class="relative z-40 border-t border-slate-800/80 bg-[#08080c]/90 backdrop-blur-md pt-12 pb-8 px-6 text-slate-400 mono text-xs">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-slate-800/50">
       
-      <!-- Brand & Registered Logo -->
       <div class="space-y-3 md:col-span-1">
         <div class="flex items-center gap-1.5 font-extrabold text-slate-100 text-base tracking-wider">
-          <span>ARX-UK</span>
+          <span>WEBSITE BY ARX-UK</span>
           <span class="text-[10px] align-top text-cyan-400 border border-cyan-400/40 rounded-full w-4 h-4 flex items-center justify-center">®</span>
         </div>
         <p class="text-[11px] text-slate-500 leading-relaxed">
@@ -203,7 +157,6 @@
         </div>
       </div>
 
-      <!-- Quick Navigation Links -->
       <div class="space-y-2">
         <h3 class="text-slate-200 font-semibold tracking-wider uppercase text-[11px] mb-3 text-cyan-400">// NAVIGATION</h3>
         <ul class="space-y-1.5 text-[11px]">
@@ -213,37 +166,27 @@
         </ul>
       </div>
 
-      <!-- Legal Links -->
       <div class="space-y-2">
         <h3 class="text-slate-200 font-semibold tracking-wider uppercase text-[11px] mb-3 text-cyan-400">// COMPLIANCE</h3>
         <ul class="space-y-1.5 text-[11px]">
           <li><a href="privacy.html" class="hover:text-cyan-400 transition-colors">PRIVACY_POLICY</a></li>
           <li><a href="terms.html" class="hover:text-cyan-400 transition-colors">TERMS_OF_SERVICE</a></li>
-          <li>
-            <button onclick="toggleCookieBanner()" class="hover:text-cyan-400 transition-colors text-left underline decoration-cyan-500/40 underline-offset-4">
-              [COOKIE_SETTINGS]
-            </button>
-          </li>
         </ul>
       </div>
 
-      <!-- Encryption / Technical Readout -->
       <div class="space-y-2">
-        <h3 class="text-slate-200 font-semibold tracking-wider uppercase text-[11px] mb-3 text-cyan-400">// PROTOCOL</h3>
+        <h3 class="text-slate-200 font-semibold tracking-wider uppercase text-[11px] mb-3 text-cyan-400">// CONTACT & PROTOCOL</h3>
         <div class="bg-slate-950/60 border border-slate-800 p-3 rounded text-[10px] space-y-1 text-slate-500">
+          <div>CONTACT: <a href="mailto:website@arx-uk.com" class="text-cyan-400 hover:underline">website@arx-uk.com</a></div>
           <div>SERVER: GITHUB_CDN</div>
           <div>ENCRYPTION: TLS_1.3_SECURE</div>
-          <div>LOC: GLOBAL_EDGE</div>
         </div>
       </div>
 
     </div>
 
-    <!-- Bottom Bar -->
     <div class="max-w-7xl mx-auto pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] text-slate-500">
-      <div>
-        © <span id="year"></span> ARX-UK®. ALL RIGHTS RESERVED.
-      </div>
+      <div>© <span id="year"></span> WEBSITE BY ARX-UK®. ALL RIGHTS RESERVED.</div>
       <div class="flex gap-4">
         <span class="hover:text-slate-300 transition-colors">v2.4.0_PROD</span>
         <span>•</span>
@@ -252,35 +195,12 @@
     </div>
   </footer>
 
-  <!-- COOKIE CONSENT BANNER -->
-  <div id="cookie-banner" class="fixed bottom-4 right-4 z-[90] max-w-md bg-[#08080c]/95 border border-cyan-500/40 backdrop-blur-lg p-5 rounded shadow-2xl shadow-cyan-950/50 mono text-xs hidden">
-    <div class="flex items-center gap-2 mb-2 text-cyan-400 font-semibold uppercase tracking-wider text-[11px]">
-      <span class="w-2 h-2 bg-cyan-400 rounded-full animate-ping"></span>
-      // COOKIE_TELEMETRY_NOTICE
-    </div>
-    <p class="text-[11px] text-slate-400 leading-relaxed mb-4">
-      ARX-UK uses minimal local browser storage to keep track of your session and optimize site load performance. No tracking or third-party cookies are deployed.
-    </p>
-    <div class="flex gap-3 justify-end">
-      <button onclick="acceptCookies()" class="bg-cyan-500 hover:bg-cyan-400 text-black font-semibold px-4 py-1.5 rounded transition-all text-[11px]">
-        ACCEPT_ALL
-      </button>
-      <button onclick="toggleCookieBanner()" class="border border-slate-700 hover:border-slate-500 text-slate-300 px-3 py-1.5 rounded transition-all text-[11px]">
-        DISMISS
-      </button>
-    </div>
-  </div>
-
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Side Menu Toggle Logic
     function toggleSideMenu() {
       const menu = document.getElementById('side-menu');
       const overlay = document.getElementById('side-menu-overlay');
-
       const isOpen = !menu.classList.contains('-translate-x-full');
-
       if (isOpen) {
         menu.classList.add('-translate-x-full');
         overlay.classList.add('opacity-0', 'pointer-events-none');
@@ -290,32 +210,9 @@
       }
     }
 
-    function checkCookieConsent() {
-      const consent = localStorage.getItem('arx_cookie_consent');
-      if (!consent) {
-        document.getElementById('cookie-banner').classList.remove('hidden');
-      }
-    }
-
-    function acceptCookies() {
-      localStorage.setItem('arx_cookie_consent', 'accepted');
-      document.getElementById('cookie-banner').classList.add('hidden');
-    }
-
-    function toggleCookieBanner() {
-      const banner = document.getElementById('cookie-banner');
-      banner.classList.toggle('hidden');
-    }
-
-    setTimeout(checkCookieConsent, 1500);
-
-    // =========================================================
-    // CONFIGURATION & GALLERY SCRIPT
-    // =========================================================
     const GITHUB_USERNAME = "ARXELECTRIC";
     const REPO_NAME = "Main-Site";
     const FOLDER_PATH = "images";
-
     const API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FOLDER_PATH}`;
 
     let sortingDotInterval = null;
@@ -323,10 +220,8 @@
     function startSortingAnimation() {
       const banner = document.getElementById('sorting-banner');
       const textElem = document.getElementById('sorting-text');
-      
       banner.classList.remove('-translate-y-full');
       banner.classList.add('translate-y-0');
-
       let dotCount = 0;
       sortingDotInterval = setInterval(() => {
         dotCount = (dotCount + 1) % 4;
@@ -336,13 +231,9 @@
 
     function stopSortingAnimation() {
       const banner = document.getElementById('sorting-banner');
-      
       banner.classList.remove('translate-y-0');
       banner.classList.add('-translate-y-full');
-
-      if (sortingDotInterval) {
-        clearInterval(sortingDotInterval);
-      }
+      if (sortingDotInterval) clearInterval(sortingDotInterval);
     }
 
     function shuffleArray(array) {
@@ -362,171 +253,82 @@
       });
     }
 
-    // Set up Mobile Scroll-Colorizer (Intersection Observer)
     function setupMobileScrollColorizer() {
       const isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth <= 768);
-      
       if (!isMobile) return;
-
-      const observerOptions = {
-        root: null,
-        rootMargin: '-20% 0px -20% 0px',
-        threshold: 0.35
-      };
-
-      const scrollObserver = new IntersectionObserver((entries) => {
+      const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('mobile-active');
-          } else {
-            entry.target.classList.remove('mobile-active');
-          }
+          if (entry.isIntersecting) entry.target.classList.add('mobile-active');
+          else entry.target.classList.remove('mobile-active');
         });
-      }, observerOptions);
+      }, { rootMargin: '-20% 0px -20% 0px', threshold: 0.35 });
 
-      document.querySelectorAll('.gallery-card').forEach((card) => {
-        scrollObserver.observe(card);
-      });
+      document.querySelectorAll('.gallery-card').forEach((card) => observer.observe(card));
     }
 
-    // Animate content grid entry
     function revealGalleryContent() {
       gsap.from(".hero-anim", { y: -20, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" });
-      gsap.from(".gallery-card", { 
-        y: -40, 
-        opacity: 0, 
-        duration: 0.7, 
-        stagger: {
-          each: 0.08,
-          from: "start",
-          grid: "auto",
-          axis: "y"
-        }, 
-        ease: "power3.out" 
-      });
+      gsap.from(".gallery-card", { y: -40, opacity: 0, duration: 0.7, stagger: { each: 0.08, from: "start", grid: "auto", axis: "y" }, ease: "power3.out" });
     }
 
-    // Independent Intro Animation Engine
     function startIntroSequence() {
       const introScreen = document.getElementById('intro-screen');
-      const hasVisited = sessionStorage.getItem('arx_visited');
-
-      if (hasVisited) {
+      if (sessionStorage.getItem('arx_visited')) {
         introScreen.style.display = 'none';
         revealGalleryContent();
         return;
       }
-
       sessionStorage.setItem('arx_visited', 'true');
-
       const tl = gsap.timeline({
         onComplete: () => {
-          gsap.to(introScreen, {
-            yPercent: -100,
-            duration: 0.8,
-            ease: "power4.inOut",
-            onComplete: () => {
-              introScreen.style.display = 'none';
-              revealGalleryContent();
-            }
-          });
+          gsap.to(introScreen, { yPercent: -100, duration: 0.8, ease: "power4.inOut", onComplete: () => { introScreen.style.display = 'none'; revealGalleryContent(); } });
         }
       });
-
       tl.to("#intro-title", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" })
-        .to("#loader-bar", {
-          width: "100%",
-          duration: 1.4,
-          ease: "power1.inOut",
-          onUpdate: function() {
-            const prog = Math.round(this.progress() * 100);
-            document.getElementById('loader-text').textContent = `[${prog}%] CORE_LOAD_SEQUENCE`;
-          }
-        })
+        .to("#loader-bar", { width: "100%", duration: 1.4, ease: "power1.inOut", onUpdate: function() { document.getElementById('loader-text').textContent = `[${Math.round(this.progress() * 100)}%] CORE_LOAD_SEQUENCE`; } })
         .to("#intro-title", { textShadow: "0 0 20px rgba(6,182,212,0.8)", duration: 0.2 });
     }
 
     async function fetchImages() {
       const statusReadout = document.getElementById('status-readout');
       const galleryGrid = document.getElementById('gallery-grid');
-
-      // Drop down the "SORTING..." tab
       startSortingAnimation();
-
       try {
         const response = await fetch(API_URL);
-        
-        if (!response.ok) {
-          throw new Error("Folder not found or API limits reached.");
-        }
-
+        if (!response.ok) throw new Error("Folder not found.");
         const files = await response.json();
-        
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
-        let imageFiles = files.filter(file => {
-          const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
-          return imageExtensions.includes(ext);
-        });
+        let imageFiles = files.filter(file => imageExtensions.includes(file.name.substring(file.name.lastIndexOf('.')).toLowerCase()));
 
         if (imageFiles.length === 0) {
           stopSortingAnimation();
           statusReadout.textContent = "[NO_IMAGES_DETECTED]";
-          galleryGrid.innerHTML = `
-            <div class="col-span-full text-center py-12 mono text-slate-500 text-sm">
-              // NO SUPPORTED IMAGES FOUND (.jpg, .png, .webp ONLY).
-            </div>
-          `;
           return;
         }
 
         imageFiles = shuffleArray(imageFiles);
         galleryGrid.innerHTML = ""; 
-
         let loadedCount = 0;
 
         for (const file of imageFiles) {
           const imageUrl = `./${FOLDER_PATH}/${file.name}`;
-          const isValid = await checkImageLoads(imageUrl);
-          
-          if (isValid) {
+          if (await checkImageLoads(imageUrl)) {
             loadedCount++;
             const card = document.createElement('div');
             card.className = "gallery-card card-frame relative group bg-slate-900/40 border border-slate-800/80 overflow-hidden rounded-sm cursor-pointer break-inside-avoid mb-8";
-
-            card.innerHTML = `
-              <div class="relative w-full h-auto overflow-hidden">
-                <img 
-                  src="${imageUrl}" 
-                  loading="lazy"
-                  class="w-full h-auto block filter grayscale group-hover:grayscale-0 group-hover:scale-105 group-hover:brightness-110"
-                />
-                <!-- Shield Layer (Prevents Dragging / Direct Save) -->
-                <div class="absolute inset-0 bg-transparent z-20 pointer-events-auto"></div>
-              </div>
-            `;
-
+            card.innerHTML = `<div class="relative w-full h-auto overflow-hidden"><img src="${imageUrl}" loading="lazy" class="w-full h-auto block filter grayscale group-hover:grayscale-0 group-hover:scale-105 group-hover:brightness-110"/><div class="absolute inset-0 bg-transparent z-20 pointer-events-auto"></div></div>`;
             galleryGrid.appendChild(card);
           }
         }
-
         statusReadout.textContent = `[ONLINE // ${loadedCount}_UNITS]`;
         setupMobileScrollColorizer();
-
       } catch (error) {
-        console.error("Gallery Error:", error);
         statusReadout.textContent = "[FETCH_FAILED]";
-        galleryGrid.innerHTML = `
-          <div class="col-span-full text-center py-12 mono text-slate-500 text-sm">
-            // ERROR: COULD NOT LOAD IMAGES FROM REPOSITORY.
-          </div>
-        `;
       } finally {
-        // Retract tab when sorting and DOM population concludes
         stopSortingAnimation();
       }
     }
 
-    // Trigger loader immediately on page load & fetch grid images in parallel
     startIntroSequence();
     fetchImages();
   </script>
