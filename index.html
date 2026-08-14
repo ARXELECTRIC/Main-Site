@@ -296,13 +296,31 @@
       });
     }
 
-    function runIntroAnimation(onCompleteCallback) {
+    // Animate content grid entry
+    function revealGalleryContent() {
+      gsap.from(".hero-anim", { y: -20, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" });
+      gsap.from(".gallery-card", { 
+        y: -40, 
+        opacity: 0, 
+        duration: 0.7, 
+        stagger: {
+          each: 0.08,
+          from: "start",
+          grid: "auto",
+          axis: "y"
+        }, 
+        ease: "power3.out" 
+      });
+    }
+
+    // Independent Intro Animation Engine
+    function startIntroSequence() {
       const introScreen = document.getElementById('intro-screen');
       const hasVisited = sessionStorage.getItem('arx_visited');
 
       if (hasVisited) {
         introScreen.style.display = 'none';
-        onCompleteCallback();
+        revealGalleryContent();
         return;
       }
 
@@ -316,23 +334,23 @@
             ease: "power4.inOut",
             onComplete: () => {
               introScreen.style.display = 'none';
-              onCompleteCallback();
+              revealGalleryContent();
             }
           });
         }
       });
 
-      tl.to("#intro-title", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" })
+      tl.to("#intro-title", { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" })
         .to("#loader-bar", {
           width: "100%",
-          duration: 1.2,
+          duration: 1.4,
           ease: "power1.inOut",
           onUpdate: function() {
             const prog = Math.round(this.progress() * 100);
             document.getElementById('loader-text').textContent = `[${prog}%] CORE_LOAD_SEQUENCE`;
           }
         })
-        .to("#intro-title", { textShadow: "0 0 20px rgba(6,182,212,0.8)", duration: 0.3 });
+        .to("#intro-title", { textShadow: "0 0 20px rgba(6,182,212,0.8)", duration: 0.2 });
     }
 
     async function fetchImages() {
@@ -395,13 +413,7 @@
         }
 
         statusReadout.textContent = `[ONLINE // ${loadedCount}_UNITS]`;
-
         setupMobileScrollColorizer();
-
-        runIntroAnimation(() => {
-          gsap.from(".hero-anim", { y: 20, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" });
-          gsap.from(".gallery-card", { y: 40, opacity: 0, duration: 0.7, stagger: 0.1, ease: "power3.out" });
-        });
 
       } catch (error) {
         console.error("Gallery Error:", error);
@@ -411,10 +423,11 @@
             // ERROR: COULD NOT LOAD IMAGES FROM REPOSITORY.
           </div>
         `;
-        document.getElementById('intro-screen').style.display = 'none';
       }
     }
 
+    // Trigger loader immediately on page load & fetch grid images in parallel
+    startIntroSequence();
     fetchImages();
   </script>
 </body>
