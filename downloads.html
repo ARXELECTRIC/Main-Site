@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ARX-UK // DOWNLOADS</title>
   
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
@@ -16,68 +14,40 @@
     body { font-family: 'Space Grotesk', sans-serif; }
     .mono { font-family: 'Fira Code', monospace; }
     
-    /* Sci-Fi Grid Background */
     .bg-grid {
       background-size: 40px 40px;
       background-image: 
         linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     }
-
-    /* Subtle Outer Vignette */
     .vignette {
       background: radial-gradient(circle, transparent 60%, rgba(8, 8, 12, 0.9) 100%);
-    }
-
-    /* Card Frame Hover Effect */
-    .download-card::before, .download-card::after {
-      content: '';
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border-color: rgba(6, 182, 212, 0.85);
-      opacity: 0;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      pointer-events: none;
-      z-index: 30;
-    }
-    .download-card::before { top: -2px; left: -2px; border-top: 2px solid; border-left: 2px solid; }
-    .download-card::after { bottom: -2px; right: -2px; border-bottom: 2px solid; border-right: 2px solid; }
-    .download-card:hover::before, .download-card:hover::after { 
-      opacity: 1; 
-      transform: scale(1.25); 
     }
   </style>
 </head>
 <body class="bg-grid min-h-screen relative overflow-x-hidden flex flex-col justify-between" oncontextmenu="return false;">
 
-  <!-- Vignette Overlay -->
   <div class="fixed inset-0 vignette pointer-events-none z-10"></div>
 
-  <!-- Main Content Wrapper -->
   <div>
-    <!-- Header / HUD Navigation -->
+    <!-- Header -->
     <header class="fixed top-0 left-0 w-full z-50 border-b border-slate-800/60 bg-[#08080c]/80 backdrop-blur-md px-6 py-4 flex justify-between items-center">
-      
-      <!-- TOP-LEFT: RETURN BUTTON (Exact position of the menu button) -->
       <div class="flex items-center">
-        <a href="index.html" class="mono text-xs text-cyan-400 hover:text-cyan-300 border border-cyan-500/40 hover:border-cyan-400 bg-cyan-950/20 px-2.5 py-1 rounded transition-all flex items-center gap-2">
+        <!-- TOP-LEFT: Dynamic Back Button -->
+        <a href="javascript:history.back()" class="mono text-xs text-cyan-400 hover:text-cyan-300 border border-cyan-500/40 hover:border-cyan-400 bg-cyan-950/20 px-2.5 py-1 rounded transition-all flex items-center gap-2">
           <span>←</span>
           <span>RETURN</span>
         </a>
       </div>
-
-      <!-- TOP-RIGHT: BRANDING -->
       <div class="flex items-center gap-3">
         <span class="w-2.5 h-2.5 bg-cyan-400 rounded-full animate-pulse"></span>
         <h1 class="mono text-xs tracking-widest uppercase font-semibold text-slate-300">
           ARX-UK <span class="text-slate-600">//</span> DOWNLOADS
         </h1>
       </div>
-
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="pt-32 pb-10 px-6 max-w-7xl mx-auto">
       <div class="mono text-cyan-400 text-xs mb-2 tracking-wider">// SYSTEM ASSETS & PACKS</div>
       <h2 class="text-4xl md:text-6xl font-bold tracking-tight">
@@ -88,44 +58,19 @@
       </p>
     </section>
 
-    <!-- Downloads Grid Section -->
+    <!-- Main Section: Empty State -->
     <main class="px-6 pb-24 max-w-7xl mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        
-        <!-- DOWNLOAD ITEM 1 -->
-        <div class="download-card relative bg-slate-900/40 border border-slate-800/80 p-6 rounded-sm flex flex-col justify-between space-y-6">
-          <div class="space-y-3">
-            <div class="flex justify-between items-center mono text-[10px] text-cyan-400">
-              <span>[PACK_01]</span>
-              <span>120 MB</span>
-            </div>
-            <h3 class="font-bold text-lg text-slate-100">FULL-RES_WALLPAPER_BUNDLE</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              Curated collection of ultra-wide and 4K digital backgrounds extracted directly from the primary matrix.
-            </p>
-          </div>
-          <a href="#" class="mono text-xs text-center border border-cyan-500/40 hover:border-cyan-400 bg-cyan-950/20 hover:bg-cyan-500 hover:text-black text-cyan-400 font-semibold py-2 rounded transition-all">
-            GET_ARCHIVE [.ZIP]
-          </a>
+      <div class="w-full bg-slate-900/30 border border-slate-800/80 rounded-sm p-12 text-center space-y-4 my-8">
+        <div class="mono text-xs text-cyan-400/80 tracking-widest">[DIRECTORY_STATUS: EMPTY]</div>
+        <h3 class="mono font-semibold text-lg text-slate-300">// NO_PUBLIC_PACKS_AVAILABLE</h3>
+        <p class="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+          There are currently no public download packages or archives published in this node directory. Check back later for upcoming releases.
+        </p>
+        <div class="pt-2">
+          <span class="inline-block mono text-[10px] text-slate-600 border border-slate-800 px-3 py-1 rounded">
+            INDEX: 0_UNITS_ACTIVE
+          </span>
         </div>
-
-        <!-- DOWNLOAD ITEM 2 -->
-        <div class="download-card relative bg-slate-900/40 border border-slate-800/80 p-6 rounded-sm flex flex-col justify-between space-y-6">
-          <div class="space-y-3">
-            <div class="flex justify-between items-center mono text-[10px] text-cyan-400">
-              <span>[PACK_02]</span>
-              <span>45 MB</span>
-            </div>
-            <h3 class="font-bold text-lg text-slate-100">COLOR_GRADING_PRESETS</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              Custom LUTs and Lightroom color profiles calibrated for high-contrast sci-fi aesthetic workflows.
-            </p>
-          </div>
-          <a href="#" class="mono text-xs text-center border border-cyan-500/40 hover:border-cyan-400 bg-cyan-950/20 hover:bg-cyan-500 hover:text-black text-cyan-400 font-semibold py-2 rounded transition-all">
-            GET_PRESETS [.CUBE]
-          </a>
-        </div>
-
       </div>
     </main>
   </div>
@@ -134,7 +79,7 @@
   <footer class="relative z-40 border-t border-slate-800/80 bg-[#08080c]/90 backdrop-blur-md pt-12 pb-8 px-6 text-slate-400 mono text-xs">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-slate-800/50">
       
-      <!-- Brand & Registered Logo -->
+      <!-- Column 1: Brand -->
       <div class="space-y-3 md:col-span-1">
         <div class="flex items-center gap-1.5 font-extrabold text-slate-100 text-base tracking-wider">
           <span>ARX-UK</span>
@@ -149,7 +94,7 @@
         </div>
       </div>
 
-      <!-- Quick Navigation Links -->
+      <!-- Column 2: Navigation -->
       <div class="space-y-2">
         <h3 class="text-slate-200 font-semibold tracking-wider uppercase text-[11px] mb-3 text-cyan-400">// NAVIGATION</h3>
         <ul class="space-y-1.5 text-[11px]">
@@ -159,7 +104,7 @@
         </ul>
       </div>
 
-      <!-- Legal Links -->
+      <!-- Column 3: Legal -->
       <div class="space-y-2">
         <h3 class="text-slate-200 font-semibold tracking-wider uppercase text-[11px] mb-3 text-cyan-400">// COMPLIANCE</h3>
         <ul class="space-y-1.5 text-[11px]">
@@ -168,22 +113,26 @@
         </ul>
       </div>
 
-      <!-- Technical Readout -->
+      <!-- Column 4: Web Development Services & Contact -->
       <div class="space-y-2">
-        <h3 class="text-slate-200 font-semibold tracking-wider uppercase text-[11px] mb-3 text-cyan-400">// PROTOCOL</h3>
+        <h3 class="text-slate-200 font-semibold tracking-wider uppercase text-[11px] mb-3 text-cyan-400">// SERVICES & INQUIRIES</h3>
+        <p class="text-[11px] text-slate-500 leading-relaxed mb-2">
+          Custom high-performance web development, static architecture, and creative visual platforms built by ARX-UK.
+        </p>
         <div class="bg-slate-950/60 border border-slate-800 p-3 rounded text-[10px] space-y-1 text-slate-500">
-          <div>SERVER: GITHUB_CDN</div>
-          <div>ENCRYPTION: TLS_1.3_SECURE</div>
-          <div>LOC: GLOBAL_EDGE</div>
+          <div>WEB_DEV_INQUIRIES:</div>
+          <div><a href="mailto:website@arx-uk.com" class="text-cyan-400 hover:underline font-semibold">website@arx-uk.com</a></div>
         </div>
       </div>
 
     </div>
 
-    <!-- Bottom Bar -->
+    <!-- Bottom Bar with "WEBSITE BY ARX-UK" -->
     <div class="max-w-7xl mx-auto pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] text-slate-500">
-      <div>
-        © <span id="year"></span> ARX-UK®. ALL RIGHTS RESERVED.
+      <div class="flex items-center gap-2">
+        <span>© <span id="year"></span> ARX-UK®. ALL RIGHTS RESERVED.</span>
+        <span>|</span>
+        <span class="text-cyan-400 font-semibold">WEBSITE BY ARX-UK</span>
       </div>
       <div class="flex gap-4">
         <span class="hover:text-slate-300 transition-colors">v2.4.0_PROD</span>
