@@ -100,6 +100,12 @@
     </div>
   </div>
 
+  <!-- DROPDOWN SORTING TAB -->
+  <div id="sorting-banner" class="fixed top-[57px] left-1/2 -translate-x-1/2 z-40 bg-[#08080c]/90 border-x border-b border-cyan-500/40 backdrop-blur-md px-5 py-1.5 rounded-b-md shadow-lg shadow-cyan-950/40 transform -translate-y-full transition-transform duration-500 ease-out flex items-center gap-2.5 mono text-[11px] text-cyan-400 pointer-events-none">
+    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+    <span id="sorting-text" class="tracking-wider font-semibold">SORTING...</span>
+  </div>
+
   <!-- Vignette Overlay -->
   <div class="fixed inset-0 vignette pointer-events-none z-10"></div>
 
@@ -252,6 +258,33 @@
 
     const API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FOLDER_PATH}`;
 
+    let sortingDotInterval = null;
+
+    function startSortingAnimation() {
+      const banner = document.getElementById('sorting-banner');
+      const textElem = document.getElementById('sorting-text');
+      
+      banner.classList.remove('-translate-y-full');
+      banner.classList.add('translate-y-0');
+
+      let dotCount = 0;
+      sortingDotInterval = setInterval(() => {
+        dotCount = (dotCount + 1) % 4;
+        textElem.textContent = `SORTING${'.'.repeat(dotCount)}`;
+      }, 300);
+    }
+
+    function stopSortingAnimation() {
+      const banner = document.getElementById('sorting-banner');
+      
+      banner.classList.remove('translate-y-0');
+      banner.classList.add('-translate-y-full');
+
+      if (sortingDotInterval) {
+        clearInterval(sortingDotInterval);
+      }
+    }
+
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -357,6 +390,9 @@
       const statusReadout = document.getElementById('status-readout');
       const galleryGrid = document.getElementById('gallery-grid');
 
+      // Drop down the "SORTING..." tab
+      startSortingAnimation();
+
       try {
         const response = await fetch(API_URL);
         
@@ -373,6 +409,7 @@
         });
 
         if (imageFiles.length === 0) {
+          stopSortingAnimation();
           statusReadout.textContent = "[NO_IMAGES_DETECTED]";
           galleryGrid.innerHTML = `
             <div class="col-span-full text-center py-12 mono text-slate-500 text-sm">
@@ -423,6 +460,9 @@
             // ERROR: COULD NOT LOAD IMAGES FROM REPOSITORY.
           </div>
         `;
+      } finally {
+        // Retract tab when sorting and DOM population concludes
+        stopSortingAnimation();
       }
     }
 
